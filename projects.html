@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script>
+    (function() {
+      var saved = localStorage.getItem('theme');
+      if (saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark');
+      }
+    })();
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Projects — Cici Ramadhani</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: { extend: { fontFamily: { sora: ['Sora','sans-serif'], inter: ['Inter','sans-serif'] } } }
+    };
+  </script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { background: #f8faff; }
+
+    .bg-orbs { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+    .orb { position: absolute; border-radius: 50%; filter: blur(100px); will-change: transform; opacity: 0; animation: orbFloat linear infinite, orbFadeIn 1.5s ease forwards; }
+    .orb-1 { width: 480px; height: 480px; background: radial-gradient(circle, rgba(186,230,255,0.55) 0%, rgba(147,197,253,0.25) 60%, transparent 100%); top: -10%; left: -5%; animation-duration: 22s, 1.5s; }
+    .orb-2 { width: 360px; height: 360px; background: radial-gradient(circle, rgba(196,221,255,0.45) 0%, rgba(165,210,255,0.20) 60%, transparent 100%); top: 40%; right: -8%; animation-duration: 28s, 1.5s; animation-delay: 0.3s, 0.3s; }
+    .orb-3 { width: 280px; height: 280px; background: radial-gradient(circle, rgba(214,233,255,0.50) 0%, rgba(191,219,254,0.22) 60%, transparent 100%); bottom: 5%; left: 25%; animation-duration: 18s, 1.5s; animation-delay: 0.6s, 0.6s; }
+    @keyframes orbFadeIn { to { opacity: 1; } }
+    @keyframes orbFloat { 0% { transform: translate(0,0) scale(1); } 25% { transform: translate(30px,-40px) scale(1.06); } 50% { transform: translate(-20px,30px) scale(0.96); } 75% { transform: translate(40px,20px) scale(1.04); } 100% { transform: translate(0,0) scale(1); } }
+    @media (prefers-reduced-motion: reduce) { .orb { animation: none; opacity: 0.6; } }
+
+    .glass-header { background: rgba(248,250,255,0.80); backdrop-filter: blur(20px) saturate(180%); -webkit-backdrop-filter: blur(20px) saturate(180%); border-bottom: 1px solid rgba(186,218,255,0.35); box-shadow: 0 1px 0 rgba(255,255,255,0.6) inset, 0 4px 24px rgba(147,197,253,0.10); }
+    .nav-pill-wrap { background: rgba(255,255,255,0.60); border: 1px solid rgba(186,218,255,0.50); box-shadow: 0 2px 12px rgba(147,197,253,0.12), 0 0 0 1px rgba(255,255,255,0.5) inset; }
+    .nav-link { position: relative; overflow: hidden; transition: color 0.18s ease; }
+    .nav-link.active-pill { color: #fff !important; }
+    .nav-link.active-pill::before { content: ''; position: absolute; inset: 0; border-radius: inherit; background: linear-gradient(135deg, #60a5fa, #3b82f6); z-index: -1; box-shadow: 0 2px 8px rgba(59,130,246,0.35); }
+    .nav-indicator { position: absolute; bottom: -1px; left: 25%; right: 25%; height: 2px; border-radius: 999px; background: #3b82f6; transform: scaleX(0); transform-origin: center; transition: transform 0.22s ease; }
+    .nav-link:not(.active-pill):hover .nav-indicator { transform: scaleX(1); }
+
+    .btn-primary { background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); color: #fff; border: 1px solid rgba(37,99,235,0.80); box-shadow: 0 2px 0 rgba(30,64,175,0.45), 0 4px 12px rgba(59,130,246,0.30); transition: filter 0.18s ease, transform 0.14s ease, box-shadow 0.18s ease; font-weight: 700; letter-spacing: 0.01em; }
+    .btn-primary:hover { filter: brightness(1.08); transform: translateY(-1px); }
+    .btn-primary:active { transform: scale(0.96); }
+
+    .section-card { background: rgba(255,255,255,0.80); border: 1px solid rgba(186,218,255,0.45); box-shadow: 0 2px 16px rgba(147,197,253,0.12), 0 0 0 1px rgba(255,255,255,0.7) inset; border-radius: 1.25rem; }
+    .divider { height: 1px; background: linear-gradient(to right, transparent, rgba(147,197,253,0.40), transparent); }
+    .specialty-badge { display: inline-flex; align-items: center; padding: 2px 9px; border: 1px solid rgba(147,197,253,0.55); border-radius: 999px; background: rgba(219,234,254,0.55); font-family: 'Inter', sans-serif; font-size: 0.58rem; font-weight: 600; color: #1e40af; white-space: nowrap; letter-spacing: 0.02em; }
+
+    @keyframes fadeUp { from { opacity:0; transform:translateY(24px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+    .anim-header  { opacity:0; animation: fadeIn  0.5s ease 0.05s forwards; }
+    .anim-heading { opacity:0; animation: fadeUp  0.75s cubic-bezier(0.22,1,0.36,1) 0.10s forwards; }
+    .anim-section { opacity:0; transform: translateY(32px); transition: opacity 0.65s cubic-bezier(0.22,1,0.36,1), transform 0.65s cubic-bezier(0.22,1,0.36,1); }
+    .anim-section.visible { opacity:1; transform: translateY(0); }
+    .anim-section.delay-1 { transition-delay: 0.08s; }
+    .anim-section.delay-2 { transition-delay: 0.16s; }
+    .anim-section.delay-3 { transition-delay: 0.24s; }
+    @media (prefers-reduced-motion: reduce) { .anim-heading, .anim-section, .anim-header { opacity:1; animation:none; transform:none; } }
+
+    #menu-toggle:checked ~ .mobile-nav { display: flex; animation: slideDown 0.26s cubic-bezier(0.22,1,0.36,1) forwards; }
+    @keyframes slideDown { from { opacity:0; transform:translateY(-8px); } to { opacity:1; transform:translateY(0); } }
+
+    /* PROJECT CARDS */
+    .proj-card {
+      background: rgba(255,255,255,0.88);
+      border: 1px solid rgba(226,238,255,0.80);
+      border-radius: 1.25rem;
+      box-shadow: 0 2px 12px rgba(147,197,253,0.12), 0 1px 3px rgba(0,0,0,0.05);
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.30s cubic-bezier(0.22,1,0.36,1), box-shadow 0.28s ease, border-color 0.22s ease;
+    }
+    .proj-card:hover { transform: translateY(-6px) scale(1.01); border-color: rgba(147,197,253,0.60); box-shadow: 0 12px 36px rgba(96,165,250,0.18), 0 2px 6px rgba(0,0,0,0.07), 0 0 0 1px rgba(255,255,255,0.8) inset; }
+    .proj-card:focus-visible { outline: 2px solid #3b82f6; outline-offset: 3px; }
+    .proj-card .card-img { display: block; width: 100%; height: 200px; object-fit: cover; transition: transform 0.45s cubic-bezier(0.22,1,0.36,1); }
+    .proj-card:hover .card-img { transform: scale(1.04); }
+    .proj-card .img-wrap { overflow: hidden; position: relative; }
+    .proj-card .img-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, transparent 50%, rgba(30,58,138,0.12) 100%); transition: opacity 0.28s ease; opacity: 0; }
+    .proj-card:hover .img-overlay { opacity: 1; }
+
+    /* OVERLAY */
+    #proj-overlay {
+      position: fixed; inset: 0; z-index: 1000;
+      background: rgba(15,28,60,0.55);
+      backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+      display: flex; align-items: center; justify-content: center;
+      padding: 1rem;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.30s ease;
+    }
+    #proj-overlay.open { opacity: 1; pointer-events: all; }
+    .overlay-panel {
+      background: rgba(248,250,255,0.98);
+      border: 1px solid rgba(186,218,255,0.60);
+      border-radius: 1.5rem;
+      box-shadow: 0 24px 80px rgba(30,58,138,0.18), 0 0 0 1px rgba(255,255,255,0.8) inset;
+      width: 100%; max-width: 660px;
+      max-height: 90vh; overflow-y: auto;
+      transform: translateY(32px) scale(0.97);
+      transition: transform 0.36s cubic-bezier(0.22,1,0.36,1), opacity 0.30s ease;
+      opacity: 0;
+      scrollbar-width: thin; scrollbar-color: rgba(147,197,253,0.40) transparent;
+    }
+    #proj-overlay.open .overlay-panel { transform: translateY(0) scale(1); opacity: 1; }
+    .overlay-img { width: 100%; height: 240px; object-fit: cover; border-radius: 1.25rem 1.25rem 0 0; display: block; }
+    .overlay-close {
+      position: absolute; top: 1rem; right: 1rem;
+      width: 2.25rem; height: 2.25rem;
+      background: rgba(255,255,255,0.90); border: 1px solid rgba(186,218,255,0.55); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; box-shadow: 0 2px 8px rgba(30,58,138,0.10);
+      transition: background 0.18s ease, transform 0.15s ease; color: #1d4ed8;
+    }
+    .overlay-close:hover { background: rgba(219,234,254,0.95); transform: scale(1.08); }
+    .detail-link {
+      display: inline-flex; align-items: center; gap: 0.45rem;
+      padding: 0.5rem 1rem;
+      background: rgba(255,255,255,0.80); border: 1.5px solid rgba(147,197,253,0.60); border-radius: 999px;
+      font-family: 'Inter', sans-serif; font-size: 0.72rem; font-weight: 600;
+      color: #1d4ed8; text-decoration: none;
+      transition: background 0.18s ease, transform 0.14s ease;
+    }
+    .detail-link:hover { background: rgba(219,234,254,0.90); transform: translateY(-1px); }
+    .task-item { display: flex; align-items: flex-start; gap: 0.6rem; }
+    .task-dot { width: 6px; height: 6px; border-radius: 50%; background: #60a5fa; flex-shrink: 0; margin-top: 0.35rem; }
+    .tool-row { display: flex; align-items: flex-start; gap: 0.65rem; padding: 0.55rem 0.75rem; background: rgba(239,246,255,0.70); border-radius: 0.625rem; border: 1px solid rgba(186,218,255,0.40); }
+    .tool-name { font-family: 'Inter', sans-serif; font-size: 0.72rem; font-weight: 700; color: #1e40af; min-width: 100px; flex-shrink: 0; }
+    .tool-desc { font-family: 'Inter', sans-serif; font-size: 0.72rem; color: #64748b; line-height: 1.5; }
+
+    /* FILTER */
+    .filter-btn { padding: 0.4rem 1rem; border-radius: 999px; font-family: 'Inter', sans-serif; font-size: 0.72rem; font-weight: 600; border: 1.5px solid rgba(147,197,253,0.50); background: rgba(255,255,255,0.70); color: #3b82f6; cursor: pointer; transition: all 0.18s ease; }
+    .filter-btn:hover { background: rgba(219,234,254,0.80); border-color: rgba(96,165,250,0.70); }
+    .filter-btn.active { background: linear-gradient(135deg,#60a5fa,#3b82f6); border-color: #3b82f6; color: #fff; box-shadow: 0 2px 8px rgba(59,130,246,0.28); }
+
+    @keyframes glow-pulse { 0%,100% { text-shadow: 0 0 10px rgba(96,165,250,0.40); } 50% { text-shadow: 0 0 22px rgba(96,165,250,0.80); } }
+    .brand-glow { animation: glow-pulse 3.5s ease-in-out infinite; }
+
+    /* ============ DARK MODE ============ */
+    html.dark body { background: #0b1120 !important; }
+    html.dark .orb-1 { background: radial-gradient(circle, rgba(59,90,160,0.35) 0%, rgba(37,60,120,0.18) 60%, transparent 100%); }
+    html.dark .orb-2 { background: radial-gradient(circle, rgba(56,80,150,0.30) 0%, rgba(40,60,120,0.15) 60%, transparent 100%); }
+    html.dark .orb-3 { background: radial-gradient(circle, rgba(50,75,140,0.32) 0%, rgba(35,55,110,0.16) 60%, transparent 100%); }
+
+    html.dark .glass-header { background: rgba(13,20,40,0.78); border-bottom: 1px solid rgba(59,90,160,0.30); box-shadow: 0 1px 0 rgba(255,255,255,0.04) inset, 0 4px 24px rgba(0,0,0,0.35); }
+    html.dark .nav-pill-wrap { background: rgba(20,30,55,0.65); border: 1px solid rgba(59,90,160,0.35); box-shadow: 0 2px 12px rgba(0,0,0,0.25), 0 0 0 1px rgba(255,255,255,0.03) inset; }
+    html.dark .nav-link.active-pill::before { background: linear-gradient(135deg, #3b82f6, #2563eb); box-shadow: 0 2px 8px rgba(0,0,0,0.40); }
+    html.dark .mobile-nav { background: rgba(13,20,40,0.92) !important; border-top: 1px solid rgba(59,90,160,0.30) !important; }
+
+    html.dark .section-card { background: rgba(20,28,50,0.80); border: 1px solid rgba(59,90,160,0.30); box-shadow: 0 2px 16px rgba(0,0,0,0.25), 0 0 0 1px rgba(255,255,255,0.03) inset; }
+    html.dark .specialty-badge { border: 1px solid rgba(59,90,160,0.50); background: rgba(37,60,120,0.45); color: #93c5fd; }
+    html.dark .divider { background: linear-gradient(to right, transparent, rgba(59,90,160,0.45), transparent); }
+
+    html.dark .proj-card { background: rgba(20,28,50,0.88); border: 1px solid rgba(59,90,160,0.30); box-shadow: 0 2px 12px rgba(0,0,0,0.25), 0 1px 3px rgba(0,0,0,0.20); }
+    html.dark .proj-card:hover { border-color: rgba(59,90,160,0.60); box-shadow: 0 12px 36px rgba(0,0,0,0.35), 0 2px 6px rgba(0,0,0,0.25), 0 0 0 1px rgba(255,255,255,0.04) inset; }
+    html.dark .proj-card .img-overlay { background: linear-gradient(to bottom, transparent 50%, rgba(0,0,0,0.30) 100%); }
+
+    html.dark #proj-overlay { background: rgba(5,10,25,0.70); }
+    html.dark .overlay-panel { background: rgba(20,28,50,0.97); border: 1px solid rgba(59,90,160,0.45); box-shadow: 0 24px 80px rgba(0,0,0,0.45), 0 0 0 1px rgba(255,255,255,0.04) inset; }
+    html.dark .overlay-close { background: rgba(37,60,120,0.70); border: 1px solid rgba(59,90,160,0.50); color: #93c5fd; }
+    html.dark .overlay-close:hover { background: rgba(37,60,120,0.95); }
+    html.dark .detail-link { background: rgba(37,60,120,0.55); border: 1.5px solid rgba(59,90,160,0.50); color: #93c5fd; }
+    html.dark .detail-link:hover { background: rgba(37,60,120,0.85); }
+    html.dark .tool-row { background: rgba(37,60,120,0.35); border: 1px solid rgba(59,90,160,0.30); }
+    html.dark .tool-name { color: #7dd3fc; }
+    html.dark .tool-desc { color: #94a3b8; }
+
+    html.dark .filter-btn { background: rgba(20,28,50,0.70); border: 1.5px solid rgba(59,90,160,0.45); color: #93c5fd; }
+    html.dark .filter-btn:hover { background: rgba(37,60,120,0.55); border-color: rgba(96,165,250,0.55); }
+    html.dark .filter-btn.active { background: linear-gradient(135deg,#3b82f6,#2563eb); border-color: #2563eb; color: #fff; }
+
+    html.dark .text-blue-900 { color: #dbeafe; }
+    html.dark .text-blue-800 { color: #bfdbfe; }
+    html.dark .text-blue-700 { color: #93c5fd; }
+    html.dark .text-blue-600 { color: #60a5fa; }
+    html.dark .text-blue-500 { color: #60a5fa; }
+    html.dark .text-blue-400 { color: #7dd3fc; }
+    html.dark .text-blue-200 { color: #93c5fd; }
+    html.dark .text-slate-800 { color: #e2e8f0; }
+    html.dark .text-slate-700 { color: #cbd5e1; }
+    html.dark .text-slate-600 { color: #94a3b8; }
+    html.dark .text-slate-500 { color: #94a3b8; }
+    html.dark .text-slate-400 { color: #64748b; }
+    html.dark .bg-blue-50:hover, html.dark .hover\:bg-blue-50:hover { background-color: rgba(37,60,120,0.45) !important; }
+    html.dark .bg-white\/60 { background-color: rgba(20,28,50,0.60) !important; }
+    html.dark .bg-white\/80 { background-color: rgba(13,20,40,0.85) !important; }
+    html.dark .border-blue-100 { border-color: rgba(59,90,160,0.35) !important; }
+    html.dark .border-blue-100\/50 { border-color: rgba(59,90,160,0.30) !important; }
+    html.dark .border-blue-100\/60 { border-color: rgba(59,90,160,0.30) !important; }
+    html.dark .stroke-blue-600 { stroke: #93c5fd; }
+
+    /* THEME TOGGLE BUTTON */
+    .theme-toggle { position: relative; width: 2.25rem; height: 2.25rem; border-radius: 999px; display: flex; align-items: center; justify-content: center; cursor: pointer; background: rgba(255,255,255,0.60); border: 1px solid rgba(186,218,255,0.50); transition: background 0.2s ease, transform 0.2s ease; color: #2563eb; }
+    .theme-toggle:hover { transform: scale(1.06); }
+    html.dark .theme-toggle { background: rgba(37,60,120,0.45); border: 1px solid rgba(59,90,160,0.45); color: #facc15; }
+    .theme-toggle .icon-sun, .theme-toggle .icon-moon { position: absolute; transition: opacity 0.2s ease, transform 0.3s ease; }
+    .theme-toggle .icon-moon { opacity: 0; transform: rotate(-60deg) scale(0.6); }
+    .theme-toggle .icon-sun { opacity: 1; transform: rotate(0deg) scale(1); }
+    html.dark .theme-toggle .icon-moon { opacity: 1; transform: rotate(0deg) scale(1); }
+    html.dark .theme-toggle .icon-sun { opacity: 0; transform: rotate(60deg) scale(0.6); }
+  </style>
+</head>
+<body class="font-inter antialiased overflow-x-hidden" style="background:#f8faff;">
+
+  <div class="bg-orbs" aria-hidden="true">
+    <div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div>
+  </div>
+
+  <!-- HEADER -->
+  <header class="glass-header anim-header w-full sticky top-0 z-50">
+    <div class="max-w-[1400px] mx-auto px-5 h-[4.5rem] flex items-center justify-between gap-5">
+      <a href="index.html" class="font-sora font-bold text-xl text-blue-800 tracking-wide brand-glow shrink-0">Cici's Portfolio.</a>
+      <nav aria-label="Primary navigation" class="hidden md:flex items-center nav-pill-wrap rounded-full p-1.5 gap-0.5">
+        <a href="index.html" class="nav-link relative flex items-center gap-2 px-4 h-9 rounded-full text-blue-700 text-xs font-semibold font-inter z-0">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.67" class="w-3.5 h-3.5 shrink-0"><path stroke-linecap="round" stroke-linejoin="round" d="M3 9.5L10 3l7 6.5V17a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M8 18V13h4v5"/></svg>
+          <span class="relative">Home</span><span class="nav-indicator"></span>
+        </a>
+        <a href="projects.html" class="nav-link active-pill relative flex items-center gap-2 px-4 h-9 rounded-full text-blue-700 text-xs font-semibold font-inter z-0">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" class="w-3.5 h-3.5 shrink-0"><rect x="3" y="4" width="14" height="12" rx="2"/><path stroke-linecap="round" d="M7 8h6M7 11h4"/></svg>
+          <span class="relative">Projects</span><span class="nav-indicator"></span>
+        </a>
+        <a href="about.html" class="nav-link relative flex items-center gap-2 px-4 h-9 rounded-full text-blue-700 text-xs font-semibold font-inter z-0">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" class="w-3.5 h-3.5 shrink-0"><circle cx="10" cy="7" r="3"/><path stroke-linecap="round" d="M4.5 17c0-3.038 2.462-5.5 5.5-5.5s5.5 2.462 5.5 5.5"/></svg>
+          <span class="relative">About</span><span class="nav-indicator"></span>
+        </a>
+        <a href="index.html#contact" class="nav-link relative flex items-center gap-2 px-4 h-9 rounded-full text-blue-700 text-xs font-semibold font-inter z-0">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" class="w-3.5 h-3.5 shrink-0"><rect x="2" y="4" width="16" height="12" rx="2"/><path stroke-linecap="round" stroke-linejoin="round" d="M2 7l8 5 8-5"/></svg>
+          <span class="relative">Contact</span><span class="nav-indicator"></span>
+        </a>
+      </nav>
+      <div class="flex items-center gap-2.5 shrink-0">
+        <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">
+          <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.67" width="16" height="16"><circle cx="10" cy="10" r="3.5"/><path stroke-linecap="round" d="M10 2v2M10 16v2M2 10h2M16 10h2M4.2 4.2l1.4 1.4M14.4 14.4l1.4 1.4M4.2 15.8l1.4-1.4M14.4 5.6l1.4-1.4"/></svg>
+          <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="16" height="16"><path d="M17.5 11.5A7.5 7.5 0 0 1 8.5 2.5a7.5 7.5 0 1 0 9 9Z"/></svg>
+        </button>
+        <a href="index.html#contact" class="btn-primary inline-flex items-center justify-center h-9 px-5 rounded-full text-xs font-inter">Let's Talk</a>
+        <label for="menu-toggle" class="md:hidden flex items-center justify-center w-9 h-9 cursor-pointer rounded-full bg-white/60 border border-blue-100 hover:bg-blue-50 transition-all" aria-label="Toggle menu">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.67" class="w-5 h-5 stroke-blue-600"><path stroke-linecap="round" d="M3 5h14M3 10h14M3 15h14"/></svg>
+        </label>
+      </div>
+    </div>
+    <input type="checkbox" id="menu-toggle" class="sr-only" />
+    <nav aria-label="Mobile navigation" class="mobile-nav hidden flex-col gap-1 px-5 pb-4 md:hidden bg-white/80 backdrop-blur-xl border-t border-blue-100/50">
+      <a href="index.html"         class="flex items-center gap-3 py-2.5 px-3 rounded-xl text-sm text-blue-700 hover:bg-blue-50 transition-colors">Home</a>
+      <a href="projects.html"      class="flex items-center gap-3 py-2.5 px-3 rounded-xl text-sm text-blue-800 font-semibold hover:bg-blue-50 transition-colors">Projects</a>
+      <a href="about.html"         class="flex items-center gap-3 py-2.5 px-3 rounded-xl text-sm text-blue-700 hover:bg-blue-50 transition-colors">About</a>
+      <a href="index.html#contact" class="flex items-center gap-3 py-2.5 px-3 rounded-xl text-sm text-blue-700 hover:bg-blue-50 transition-colors">Contact</a>
+      <button id="theme-toggle-mobile" class="flex items-center gap-3 py-2.5 px-3 rounded-xl text-sm text-blue-700 hover:bg-blue-50 transition-colors w-full text-left">
+        <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.67" width="16" height="16"><circle cx="10" cy="10" r="3.5"/><path stroke-linecap="round" d="M10 2v2M10 16v2M2 10h2M16 10h2M4.2 4.2l1.4 1.4M14.4 14.4l1.4 1.4M4.2 15.8l1.4-1.4M14.4 5.6l1.4-1.4"/></svg>
+        <svg class="icon-moon hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="16" height="16"><path d="M17.5 11.5A7.5 7.5 0 0 1 8.5 2.5a7.5 7.5 0 1 0 9 9Z"/></svg>
+        <span class="toggle-label">Dark Mode</span>
+      </button>
+    </nav>
+  </header>
+
+  <!-- PAGE HEADER -->
+  <section class="relative z-10 pt-16 pb-10 md:pt-24 md:pb-14">
+    <div class="w-full max-w-[1400px] mx-auto px-6">
+      <div class="anim-heading">
+        <p class="font-inter text-xs font-semibold tracking-[0.18em] text-blue-500 uppercase mb-3">Selected Work</p>
+        <h1 class="font-sora font-bold text-4xl sm:text-5xl text-blue-900 leading-tight">My Projects</h1>
+        <p class="font-inter text-base text-slate-500 mt-4 max-w-lg leading-7">Everything I've built, led, or contributed to so far.</p>
+      </div>
+      <div class="flex flex-wrap gap-2 mt-8 anim-section">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="ui">UI / Frontend</button>
+        <button class="filter-btn" data-filter="content">Content</button>
+        <button class="filter-btn" data-filter="business">Business</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECT GRID -->
+  <section class="relative z-10 pb-24">
+    <div class="w-full max-w-[1400px] mx-auto px-6">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5" id="projectGrid">
+
+        <!-- SheRise -->
+        <article class="proj-card anim-section" data-cat="ui" tabindex="0" data-id="sherise">
+          <div class="img-wrap">
+            <img src="assets/img/sherise.png" alt="SheRise" class="card-img" />
+            <div class="img-overlay"></div>
+          </div>
+          <div class="p-5">
+            <div class="flex items-start justify-between gap-2 mb-2">
+              <h2 class="font-sora font-bold text-[0.95rem] text-blue-900 leading-snug">SheRise</h2>
+              <span class="specialty-badge shrink-0 mt-0.5">UI/UX &amp; Frontend</span>
+            </div>
+            <p class="font-inter text-xs text-slate-500 leading-5">A web platform for women focused on career growth, community, and self-confidence.</p>
+            <div class="flex items-center gap-2 mt-3">
+              <span class="font-inter text-[0.65rem] text-blue-400 font-medium">2025</span>
+              <span class="text-blue-200 select-none">·</span>
+              <span class="font-inter text-[0.65rem] text-blue-400 font-medium">Team Project</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- The Enchanted Outfit -->
+        <article class="proj-card anim-section delay-1" data-cat="business" tabindex="0" data-id="enchanted">
+          <div class="img-wrap">
+            <img src="assets/img/enchanted.png" alt="The Enchanted Outfit" class="card-img" />
+            <div class="img-overlay"></div>
+          </div>
+          <div class="p-5">
+            <div class="flex items-start justify-between gap-2 mb-2">
+              <h2 class="font-sora font-bold text-[0.95rem] text-blue-900 leading-snug">The Enchanted Outfit</h2>
+              <span class="specialty-badge shrink-0 mt-0.5">Founder</span>
+            </div>
+            <p class="font-inter text-xs text-slate-500 leading-5">Roblox fashion brand for traditional cultural outfits. 80K+ sales.</p>
+            <div class="flex items-center gap-2 mt-3">
+              <span class="font-inter text-[0.65rem] text-blue-400 font-medium">Feb 2025 – Present</span>
+              <span class="text-blue-200 select-none">·</span>
+              <span class="font-inter text-[0.65rem] text-blue-400 font-medium">Solo Venture</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Kautamaan Srikandi -->
+        <article class="proj-card anim-section delay-2" data-cat="content" tabindex="0" data-id="kausri">
+          <div class="img-wrap">
+            <img src="assets/img/kausri.png" alt="Kautamaan Srikandi" class="card-img" />
+            <div class="img-overlay"></div>
+          </div>
+          <div class="p-5">
+            <div class="flex items-start justify-between gap-2 mb-2">
+              <h2 class="font-sora font-bold text-[0.95rem] text-blue-900 leading-snug">Kautamaan Srikandi</h2>
+              <span class="specialty-badge shrink-0 mt-0.5">Content Creator Intern</span>
+            </div>
+            <p class="font-inter text-xs text-slate-500 leading-5">A digital media project focused on women's empowerment.</p>
+            <div class="flex items-center gap-2 mt-3">
+              <span class="font-inter text-[0.65rem] text-blue-400 font-medium">Aug – Dec 2025</span>
+              <span class="text-blue-200 select-none">·</span>
+              <span class="font-inter text-[0.65rem] text-blue-400 font-medium">Internship</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Beev Campaign -->
+        <article class="proj-card anim-section delay-3" data-cat="content" tabindex="0" data-id="beev">
+          <div class="img-wrap">
+            <img src="assets/img/beev.png" alt="Beev Campaign" class="card-img" />
+            <div class="img-overlay"></div>
+          </div>
+          <div class="p-5">
+            <div class="flex items-start justify-between gap-2 mb-2">
+              <h2 class="font-sora font-bold text-[0.95rem] text-blue-900 leading-snug">Beev Campaign</h2>
+              <span class="specialty-badge shrink-0 mt-0.5">Project Leader</span>
+            </div>
+            <p class="font-inter text-xs text-slate-500 leading-5">Digital awareness campaign for mental health, anti-bullying, and the environment.</p>
+            <div class="flex items-center gap-2 mt-3">
+              <span class="font-inter text-[0.65rem] text-blue-400 font-medium">2024</span>
+              <span class="text-blue-200 select-none">·</span>
+              <span class="font-inter text-[0.65rem] text-blue-400 font-medium">Campaign Lead</span>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- PROJECT OVERLAY -->
+  <div id="proj-overlay" role="dialog" aria-modal="true" aria-label="Project details">
+    <div class="overlay-panel" id="overlayPanel">
+      <div class="relative">
+        <img id="ov-img" src="" alt="" class="overlay-img" />
+        <button class="overlay-close" id="overlayClose" aria-label="Close">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4">
+            <path stroke-linecap="round" d="M5 5l10 10M15 5L5 15"/>
+          </svg>
+        </button>
+      </div>
+      <div class="p-6 flex flex-col gap-5">
+        <!-- Title row -->
+        <div class="flex flex-wrap items-start gap-3 justify-between">
+          <div>
+            <h2 id="ov-title" class="font-sora font-bold text-xl text-blue-900 leading-snug"></h2>
+            <p id="ov-role" class="font-inter text-xs text-blue-500 font-semibold mt-1 uppercase tracking-wide"></p>
+          </div>
+          <span id="ov-badge" class="specialty-badge" style="padding:4px 12px;font-size:0.65rem;"></span>
+        </div>
+        <div class="divider"></div>
+        <!-- Year -->
+        <div class="flex items-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="none" stroke="#93c5fd" stroke-width="1.4" class="w-4 h-4 shrink-0"><rect x="2" y="3" width="12" height="11" rx="2"/><path stroke-linecap="round" d="M5 1v3M11 1v3M2 7h12"/></svg>
+          <span id="ov-year" class="font-inter text-xs text-slate-500 font-medium"></span>
+        </div>
+        <!-- Description -->
+        <p id="ov-desc" class="font-inter text-sm text-slate-600 leading-6"></p>
+        <!-- What I Did -->
+        <div class="section-card p-5">
+          <p class="font-inter text-xs font-bold text-blue-400 uppercase tracking-widest mb-3">What I Did</p>
+          <ul id="ov-tasks" class="flex flex-col gap-2"></ul>
+        </div>
+        <!-- Tools -->
+        <div class="section-card p-5" id="ov-tools-wrap">
+          <p class="font-inter text-xs font-bold text-blue-400 uppercase tracking-widest mb-3">Tools Used</p>
+          <div id="ov-tools" class="flex flex-col gap-2"></div>
+        </div>
+        <!-- Links -->
+        <div id="ov-links" class="flex flex-wrap gap-2"></div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- FOOTER -->
+  <footer class="relative z-10 py-8 text-center border-t border-blue-100/60">
+    <p class="font-inter text-xs text-blue-400/70 tracking-wide">© 2025 Cici Ramadhani · Information Technology, Universitas Brawijaya</p>
+  </footer>
+
+
+  <script>
+  (function () {
+
+    /* Project data */
+    var PROJECTS = {
+      sherise: {
+        title: 'SheRise',
+        badge: 'UI/UX & Frontend',
+        role: 'UI/UX Designer & Frontend Developer',
+        year: '2025 · Team Project',
+        img: 'assets/img/sherise.png',
+        desc: 'A web platform for women to track career goals, connect with a community, and build self-confidence. Built as a university team project in the first year.',
+        tasks: [
+          'Designed lo-fi, hi-fi wireframes and the shared UI kit in Figma',
+          'Built the frontend with vanilla HTML, CSS Flexbox and Grid',
+          'Collaborated with teammates via GitHub for file merging and version control',
+          'Implemented career tracking and profile management features'
+        ],
+        tools: [
+          { name: 'Figma',   desc: 'Lo-fi, hi-fi wireframes and shared UI kit' },
+          { name: 'VS Code', desc: 'Writing HTML and CSS for the frontend' },
+          { name: 'GitHub',  desc: 'Version control and merging team files' }
+        ],
+        links: [
+          { label: 'GitHub', url: '#' },
+          { label: 'Live Demo', url: '#' }
+        ]
+      },
+      enchanted: {
+        title: 'The Enchanted Outfit',
+        badge: 'Founder',
+        role: 'Founder & Lead Designer',
+        year: 'Feb 2025 – Present',
+        img: 'assets/img/enchanted.png',
+        desc: 'A Roblox virtual fashion brand specializing in traditional cultural outfits. Started as a school group project and eventually became a solo venture.',
+        tasks: [
+          'Designed 90% of the clothing catalog, focusing on traditional Indonesian styles',
+          'Published and managed all items on Roblox Marketplace',
+          'Grew the store to 80,000+ sales and a community of 400+ members',
+          'Handled marketing through TikTok content',
+          'Tracked sales analytics using Roblox Studio'
+        ],
+        tools: [
+          { name: 'paint.net',     desc: 'Designing all clothing items' },
+          { name: 'Roblox Studio', desc: 'Publishing items and tracking store analytics' },
+          { name: 'TikTok',        desc: 'Marketing and promoting the store' }
+        ],
+        links: [
+          { label: 'Roblox Store', url: '#' }
+        ]
+      },
+      kausri: {
+        title: 'Kautamaan Srikandi',
+        badge: 'Content Creator Intern',
+        role: 'Content Creator Intern',
+        year: 'Aug – Dec 2025',
+        img: 'assets/img/kausri.png',
+        desc: 'A digital media project focused on women\'s empowerment. Produced educational Instagram Reels on current women\'s issues to raise awareness and educate the community.',
+        tasks: [
+          'Researched topics and wrote scripts for each reel',
+          'Filmed and appeared on-camera for all content',
+          'Edited videos from raw footage to final cut',
+          'Tracked content progress and deadlines via Google Sheets',
+          'Attended weekly check-in meetings via Google Meet',
+          'Maintained 100% on-time delivery throughout the internship'
+        ],
+        tools: [
+          { name: 'CapCut',           desc: 'Video editing from raw footage to final cut' },
+          { name: 'Pinterest',        desc: 'Finding visual references and overlay elements' },
+          { name: 'Google Sheets',    desc: 'Tracking content progress and deadlines' },
+          { name: 'Google Drive',     desc: 'Storing and sharing all project files' },
+          { name: 'Google Docs',      desc: 'Writing and organizing scripts' },
+          { name: 'WhatsApp',         desc: 'Day-to-day team communication' },
+          { name: 'Google Meet',      desc: 'Weekly check-in meetings with the team' }
+        ],
+        links: [
+          { label: '@kautamaansrikandi', url: 'https://instagram.com/kautamaansrikandi' },
+          { label: 'View Full Project',  url: 'http://clips.id/CiciKauSriProject' }
+        ]
+      },
+      beev: {
+        title: 'Beev Campaign',
+        badge: 'Project Leader',
+        role: 'Project Leader',
+        year: '2024',
+        img: 'assets/img/beev.png',
+        desc: 'A digital awareness campaign tackling mental health, anti-bullying, and environmental issues. Led the project from concept through to launch.',
+        tasks: [
+          'Led the team and managed the overall creative direction',
+          'Wrote scripts and developed the campaign narrative',
+          'Produced and edited all campaign videos',
+          'Built the brand identity from scratch',
+          'Scheduled and managed all social media content',
+          'Grew and maintained the campaign\'s Instagram presence as @beev.vive'
+        ],
+        tools: [
+          { name: 'CapCut',     desc: 'Video editing and production' },
+          { name: 'Canva',      desc: 'Designing visual assets and branding materials' },
+          { name: 'Instagram',  desc: 'Publishing content and managing the campaign page' },
+          { name: 'WhatsApp',   desc: 'Team coordination and planning' }
+        ],
+        links: [
+          { label: '@beev.vive', url: 'https://instagram.com/beev.vive' }
+        ]
+      }
+    };
+
+    /* Scroll reveal */
+    var revealObs = new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) {
+        if (e.isIntersecting) { e.target.classList.add('visible'); revealObs.unobserve(e.target); }
+      });
+    }, { threshold: 0.08 });
+    document.querySelectorAll('.anim-section').forEach(function(el) { revealObs.observe(el); });
+
+    /* Filter */
+    var filterBtns = document.querySelectorAll('.filter-btn');
+    var cards = document.querySelectorAll('.proj-card');
+    filterBtns.forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        filterBtns.forEach(function(b) { b.classList.remove('active'); });
+        btn.classList.add('active');
+        var f = btn.getAttribute('data-filter');
+        cards.forEach(function(card) {
+          var match = f === 'all' || card.getAttribute('data-cat') === f;
+          card.style.transition = 'opacity 0.28s ease, transform 0.28s ease';
+          card.style.opacity = match ? '1' : '0.25';
+          card.style.transform = match ? '' : 'scale(0.97)';
+          card.style.pointerEvents = match ? '' : 'none';
+        });
+      });
+    });
+
+    /* Overlay */
+    var overlay  = document.getElementById('proj-overlay');
+    var closeBtn = document.getElementById('overlayClose');
+
+    function renderTasks(tasks) {
+      var ul = document.getElementById('ov-tasks');
+      ul.innerHTML = '';
+      tasks.forEach(function(t) {
+        var li = document.createElement('li');
+        li.className = 'task-item';
+        li.innerHTML = '<span class="task-dot"></span><span class="font-inter text-sm text-slate-600 leading-5">' + t + '</span>';
+        ul.appendChild(li);
+      });
+    }
+
+    function renderTools(tools) {
+      var wrap = document.getElementById('ov-tools');
+      wrap.innerHTML = '';
+      tools.forEach(function(t) {
+        var div = document.createElement('div');
+        div.className = 'tool-row';
+        div.innerHTML = '<span class="tool-name">' + t.name + '</span><span class="tool-desc">' + t.desc + '</span>';
+        wrap.appendChild(div);
+      });
+    }
+
+    function renderLinks(links) {
+      var wrap = document.getElementById('ov-links');
+      wrap.innerHTML = '';
+      var arrow = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" class="w-3 h-3"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8h10M9 4l4 4-4 4"/></svg>';
+      links.forEach(function(l) {
+        var a = document.createElement('a');
+        a.href = l.url; a.target = '_blank'; a.rel = 'noopener noreferrer';
+        a.className = 'detail-link';
+        a.innerHTML = l.label + arrow;
+        wrap.appendChild(a);
+      });
+    }
+
+    function openOverlay(id) {
+      var p = PROJECTS[id];
+      if (!p) return;
+      document.getElementById('ov-title').textContent = p.title;
+      document.getElementById('ov-badge').textContent = p.badge;
+      document.getElementById('ov-role').textContent  = p.role;
+      document.getElementById('ov-year').textContent  = p.year;
+      document.getElementById('ov-desc').textContent  = p.desc;
+      var img = document.getElementById('ov-img');
+      img.src = p.img; img.alt = p.title;
+      renderTasks(p.tasks);
+      renderTools(p.tools);
+      renderLinks(p.links);
+      overlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
+      setTimeout(function() { closeBtn.focus(); }, 50);
+    }
+
+    function closeOverlay() {
+      overlay.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    cards.forEach(function(card) {
+      card.addEventListener('click', function() { openOverlay(card.getAttribute('data-id')); });
+      card.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openOverlay(card.getAttribute('data-id')); }
+      });
+    });
+
+    closeBtn.addEventListener('click', closeOverlay);
+    overlay.addEventListener('click', function(e) { if (e.target === overlay) closeOverlay(); });
+    document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeOverlay(); });
+
+    /* ── Theme toggle ── */
+    var htmlEl = document.documentElement;
+    var toggleBtn = document.getElementById('theme-toggle');
+    var toggleBtnMobile = document.getElementById('theme-toggle-mobile');
+
+    function setTheme(isDark) {
+      htmlEl.classList.toggle('dark', isDark);
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+      var label = toggleBtnMobile ? toggleBtnMobile.querySelector('.toggle-label') : null;
+      if (label) label.textContent = isDark ? 'Light Mode' : 'Dark Mode';
+      if (toggleBtnMobile) {
+        toggleBtnMobile.querySelector('.icon-sun').classList.toggle('hidden', isDark);
+        toggleBtnMobile.querySelector('.icon-moon').classList.toggle('hidden', !isDark);
+      }
+    }
+    setTheme(htmlEl.classList.contains('dark'));
+
+    function toggleTheme() { setTheme(!htmlEl.classList.contains('dark')); }
+    if (toggleBtn) toggleBtn.addEventListener('click', toggleTheme);
+    if (toggleBtnMobile) toggleBtnMobile.addEventListener('click', toggleTheme);
+
+  })();
+  </script>
+
+</body>
+</html>

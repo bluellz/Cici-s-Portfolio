@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script>
+    (function() {
+      var saved = localStorage.getItem('theme');
+      if (saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark');
+      }
+    })();
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About — Cici Ramadhani</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: { extend: { fontFamily: { sora: ['Sora','sans-serif'], inter: ['Inter','sans-serif'] } } }
+    };
+  </script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { background: #f8faff; }
+ 
+    /* BACKGROUND ORBS */
+    .bg-orbs { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+    .orb { position: absolute; border-radius: 50%; filter: blur(100px); will-change: transform; opacity: 0; animation: orbFloat linear infinite, orbFadeIn 1.5s ease forwards; }
+    .orb-1 { width: 480px; height: 480px; background: radial-gradient(circle, rgba(186,230,255,0.55) 0%, rgba(147,197,253,0.25) 60%, transparent 100%); top: -10%; left: -5%; animation-duration: 22s, 1.5s; }
+    .orb-2 { width: 360px; height: 360px; background: radial-gradient(circle, rgba(196,221,255,0.45) 0%, rgba(165,210,255,0.20) 60%, transparent 100%); top: 40%; right: -8%; animation-duration: 28s, 1.5s; animation-delay: 0.3s, 0.3s; }
+    .orb-3 { width: 280px; height: 280px; background: radial-gradient(circle, rgba(214,233,255,0.50) 0%, rgba(191,219,254,0.22) 60%, transparent 100%); bottom: 5%; left: 25%; animation-duration: 18s, 1.5s; animation-delay: 0.6s, 0.6s; }
+    @keyframes orbFadeIn { to { opacity: 1; } }
+    @keyframes orbFloat { 0% { transform: translate(0,0) scale(1); } 25% { transform: translate(30px,-40px) scale(1.06); } 50% { transform: translate(-20px,30px) scale(0.96); } 75% { transform: translate(40px,20px) scale(1.04); } 100% { transform: translate(0,0) scale(1); } }
+    @media (prefers-reduced-motion: reduce) { .orb { animation: none; opacity: 0.6; } }
+ 
+    /* HEADER */
+    .glass-header { background: rgba(248,250,255,0.80); backdrop-filter: blur(20px) saturate(180%); -webkit-backdrop-filter: blur(20px) saturate(180%); border-bottom: 1px solid rgba(186,218,255,0.35); box-shadow: 0 1px 0 rgba(255,255,255,0.6) inset, 0 4px 24px rgba(147,197,253,0.10); }
+    .nav-pill-wrap { background: rgba(255,255,255,0.60); border: 1px solid rgba(186,218,255,0.50); box-shadow: 0 2px 12px rgba(147,197,253,0.12), 0 0 0 1px rgba(255,255,255,0.5) inset; }
+    .nav-link { position: relative; overflow: hidden; transition: color 0.18s ease; }
+    .nav-link.active-pill { color: #fff !important; }
+    .nav-link.active-pill::before { content: ''; position: absolute; inset: 0; border-radius: inherit; background: linear-gradient(135deg, #60a5fa, #3b82f6); z-index: -1; box-shadow: 0 2px 8px rgba(59,130,246,0.35); }
+    .nav-indicator { position: absolute; bottom: -1px; left: 25%; right: 25%; height: 2px; border-radius: 999px; background: #3b82f6; transform: scaleX(0); transform-origin: center; transition: transform 0.22s ease; }
+    .nav-link:not(.active-pill):hover .nav-indicator { transform: scaleX(1); }
+ 
+    /* BUTTONS */
+    .btn-primary { background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); color: #fff; border: 1px solid rgba(37,99,235,0.80); box-shadow: 0 2px 0 rgba(30,64,175,0.45), 0 4px 12px rgba(59,130,246,0.30); transition: filter 0.18s ease, transform 0.14s ease, box-shadow 0.18s ease; font-weight: 700; letter-spacing: 0.01em; }
+    .btn-primary:hover { filter: brightness(1.08); box-shadow: 0 2px 0 rgba(30,64,175,0.45), 0 6px 20px rgba(59,130,246,0.40); transform: translateY(-1px); }
+    .btn-primary:active { transform: scale(0.96) translateY(0); filter: brightness(0.96); }
+ 
+    /* CARDS */
+    .section-card { background: rgba(255,255,255,0.80); border: 1px solid rgba(186,218,255,0.45); box-shadow: 0 2px 16px rgba(147,197,253,0.12), 0 0 0 1px rgba(255,255,255,0.7) inset; border-radius: 1.25rem; }
+    .divider { height: 1px; background: linear-gradient(to right, transparent, rgba(147,197,253,0.40), transparent); }
+    .specialty-badge { display: inline-flex; align-items: center; padding: 2px 9px; border: 1px solid rgba(147,197,253,0.55); border-radius: 999px; background: rgba(219,234,254,0.55); font-family: 'Inter', sans-serif; font-size: 0.58rem; font-weight: 600; color: #1e40af; white-space: nowrap; letter-spacing: 0.02em; }
+ 
+    /* ANIMATIONS */
+    @keyframes fadeUp { from { opacity:0; transform:translateY(24px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+    .anim-header  { opacity:0; animation: fadeIn  0.5s ease 0.05s forwards; }
+    .anim-heading { opacity:0; animation: fadeUp  0.75s cubic-bezier(0.22,1,0.36,1) 0.10s forwards; }
+    .anim-section { opacity:0; transform: translateY(32px); transition: opacity 0.65s cubic-bezier(0.22,1,0.36,1), transform 0.65s cubic-bezier(0.22,1,0.36,1); }
+    .anim-section.visible { opacity:1; transform: translateY(0); }
+    .anim-section.delay-1 { transition-delay: 0.08s; }
+    .anim-section.delay-2 { transition-delay: 0.16s; }
+    .anim-section.delay-3 { transition-delay: 0.24s; }
+    @media (prefers-reduced-motion: reduce) { .anim-heading, .anim-section, .anim-header { opacity:1; animation:none; transform:none; } }
+ 
+    /* HAMBURGER */
+    #menu-toggle:checked ~ .mobile-nav { display: flex; animation: slideDown 0.26s cubic-bezier(0.22,1,0.36,1) forwards; }
+    @keyframes slideDown { from { opacity:0; transform:translateY(-8px); } to { opacity:1; transform:translateY(0); } }
+ 
+    /* SKILL BARS */
+    .skill-bar-bg { background: rgba(219,234,254,0.50); border-radius: 999px; height: 6px; overflow: hidden; }
+    .skill-bar-fill { height: 100%; border-radius: 999px; background: linear-gradient(to right, #60a5fa, #3b82f6); transform: scaleX(0); transform-origin: left; transition: transform 0.85s cubic-bezier(0.22,1,0.36,1); }
+ 
+    /* TIMELINE */
+    .timeline-item { position: relative; padding-left: 1.5rem; }
+    .timeline-item::before { content: ''; position: absolute; left: 0; top: 0.4rem; width: 8px; height: 8px; border-radius: 50%; background: #3b82f6; box-shadow: 0 0 0 3px rgba(59,130,246,0.18); }
+    .timeline-item::after { content: ''; position: absolute; left: 3.5px; top: 1.1rem; width: 1px; height: calc(100% - 0.6rem); background: rgba(147,197,253,0.40); }
+    .timeline-item:last-child::after { display: none; }
+ 
+    /* STAT CARD */
+    .about-stat { background: rgba(255,255,255,0.80); border: 1px solid rgba(186,218,255,0.45); border-radius: 1rem; box-shadow: 0 2px 12px rgba(147,197,253,0.10); padding: 1.25rem 1.5rem; text-align: center; }
+ 
+    /* ACHIEVEMENT CARD */
+    .ach-card {
+      background: rgba(255,255,255,0.80);
+      border: 1px solid rgba(186,218,255,0.45);
+      border-radius: 1rem;
+      box-shadow: 0 2px 12px rgba(147,197,253,0.10);
+      padding: 1.1rem 1.25rem;
+      display: flex; align-items: flex-start; gap: 0.9rem;
+      transition: transform 0.24s cubic-bezier(0.22,1,0.36,1), box-shadow 0.22s ease;
+    }
+    .ach-card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(96,165,250,0.14); }
+    .ach-icon {
+      width: 2.5rem; height: 2.5rem; flex-shrink: 0;
+      border-radius: 0.625rem;
+      background: rgba(219,234,254,0.70);
+      border: 1px solid rgba(147,197,253,0.40);
+      display: flex; align-items: center; justify-content: center;
+    }
+ 
+    /* CERT CARD */
+    .cert-card {
+      background: linear-gradient(135deg, rgba(219,234,254,0.55) 0%, rgba(255,255,255,0.85) 100%);
+      border: 1px solid rgba(147,197,253,0.45);
+      border-radius: 1rem;
+      padding: 1.1rem 1.25rem;
+      display: flex; align-items: center; gap: 0.9rem;
+    }
+ 
+    @keyframes glow-pulse { 0%,100% { text-shadow: 0 0 10px rgba(96,165,250,0.40); } 50% { text-shadow: 0 0 22px rgba(96,165,250,0.80); } }
+    .brand-glow { animation: glow-pulse 3.5s ease-in-out infinite; }
+
+    /* ============ DARK MODE ============ */
+    html.dark body { background: #0b1120 !important; }
+    html.dark .orb-1 { background: radial-gradient(circle, rgba(59,90,160,0.35) 0%, rgba(37,60,120,0.18) 60%, transparent 100%); }
+    html.dark .orb-2 { background: radial-gradient(circle, rgba(56,80,150,0.30) 0%, rgba(40,60,120,0.15) 60%, transparent 100%); }
+    html.dark .orb-3 { background: radial-gradient(circle, rgba(50,75,140,0.32) 0%, rgba(35,55,110,0.16) 60%, transparent 100%); }
+
+    html.dark .glass-header { background: rgba(13,20,40,0.78); border-bottom: 1px solid rgba(59,90,160,0.30); box-shadow: 0 1px 0 rgba(255,255,255,0.04) inset, 0 4px 24px rgba(0,0,0,0.35); }
+    html.dark .nav-pill-wrap { background: rgba(20,30,55,0.65); border: 1px solid rgba(59,90,160,0.35); box-shadow: 0 2px 12px rgba(0,0,0,0.25), 0 0 0 1px rgba(255,255,255,0.03) inset; }
+    html.dark .nav-link.active-pill::before { background: linear-gradient(135deg, #3b82f6, #2563eb); box-shadow: 0 2px 8px rgba(0,0,0,0.40); }
+    html.dark .mobile-nav { background: rgba(13,20,40,0.92) !important; border-top: 1px solid rgba(59,90,160,0.30) !important; }
+
+    html.dark .section-card { background: rgba(20,28,50,0.80); border: 1px solid rgba(59,90,160,0.30); box-shadow: 0 2px 16px rgba(0,0,0,0.25), 0 0 0 1px rgba(255,255,255,0.03) inset; }
+    .tool-group-card { background: rgba(248,250,255,0.80); }
+    html.dark .ach-card, html.dark .about-stat, html.dark .tool-group-card { background: rgba(20,28,50,0.80); border: 1px solid rgba(59,90,160,0.30); box-shadow: 0 2px 12px rgba(0,0,0,0.25); }
+    html.dark .ach-icon { background: rgba(37,60,120,0.45); border: 1px solid rgba(59,90,160,0.40); }
+    html.dark .cert-card { background: linear-gradient(135deg, rgba(37,60,120,0.40) 0%, rgba(20,28,50,0.85) 100%); border: 1px solid rgba(59,90,160,0.40); }
+    html.dark .specialty-badge { border: 1px solid rgba(59,90,160,0.50); background: rgba(37,60,120,0.45); color: #93c5fd; }
+    html.dark .divider { background: linear-gradient(to right, transparent, rgba(59,90,160,0.45), transparent); }
+    html.dark .skill-bar-bg { background: rgba(37,60,120,0.40); }
+    html.dark .timeline-item::before { background: #60a5fa; box-shadow: 0 0 0 3px rgba(96,165,250,0.22); }
+    html.dark .timeline-item::after { background: rgba(59,90,160,0.40); }
+    html.dark .tool-icon { background: rgba(37,60,120,0.45) !important; }
+    html.dark a.font-sora.text-blue-800 { color: #93c5fd; }
+
+    html.dark .text-blue-900 { color: #dbeafe; }
+    html.dark .text-blue-800 { color: #bfdbfe; }
+    html.dark .text-blue-700 { color: #93c5fd; }
+    html.dark .text-blue-600 { color: #60a5fa; }
+    html.dark .text-blue-500 { color: #60a5fa; }
+    html.dark .text-blue-400 { color: #7dd3fc; }
+    html.dark .text-slate-800 { color: #e2e8f0; }
+    html.dark .text-slate-700 { color: #cbd5e1; }
+    html.dark .text-slate-600 { color: #94a3b8; }
+    html.dark .text-slate-500 { color: #94a3b8; }
+    html.dark .text-slate-400 { color: #64748b; }
+    html.dark .bg-blue-50:hover, html.dark .hover\:bg-blue-50:hover { background-color: rgba(37,60,120,0.45) !important; }
+    html.dark .bg-white\/60 { background-color: rgba(20,28,50,0.60) !important; }
+    html.dark .border-blue-100 { border-color: rgba(59,90,160,0.35) !important; }
+    html.dark .border-blue-100\/60 { border-color: rgba(59,90,160,0.30) !important; }
+    html.dark .stroke-blue-600 { stroke: #93c5fd; }
+
+    /* THEME TOGGLE BUTTON */
+    .theme-toggle { position: relative; width: 2.25rem; height: 2.25rem; border-radius: 999px; display: flex; align-items: center; justify-content: center; cursor: pointer; background: rgba(255,255,255,0.60); border: 1px solid rgba(186,218,255,0.50); transition: background 0.2s ease, transform 0.2s ease; color: #2563eb; }
+    .theme-toggle:hover { transform: scale(1.06); }
+    html.dark .theme-toggle { background: rgba(37,60,120,0.45); border: 1px solid rgba(59,90,160,0.45); color: #facc15; }
+    .theme-toggle .icon-sun, .theme-toggle .icon-moon { position: absolute; transition: opacity 0.2s ease, transform 0.3s ease; }
+    .theme-toggle .icon-moon { opacity: 0; transform: rotate(-60deg) scale(0.6); }
+    .theme-toggle .icon-sun { opacity: 1; transform: rotate(0deg) scale(1); }
+    html.dark .theme-toggle .icon-moon { opacity: 1; transform: rotate(0deg) scale(1); }
+    html.dark .theme-toggle .icon-sun { opacity: 0; transform: rotate(60deg) scale(0.6); }
+  </style>
+</head>
+<body class="font-inter antialiased overflow-x-hidden" style="background:#f8faff;">
+ 
+  <div class="bg-orbs" aria-hidden="true">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+ 
+  <!-- HEADER -->
+  <header class="glass-header anim-header w-full sticky top-0 z-50">
+    <div class="max-w-[1400px] mx-auto px-5 h-[4.5rem] flex items-center justify-between gap-5">
+      <a href="index.html" class="font-sora font-bold text-xl text-blue-800 tracking-wide brand-glow shrink-0">Cici's Portfolio.</a>
+      <nav aria-label="Primary navigation" class="hidden md:flex items-center nav-pill-wrap rounded-full p-1.5 gap-0.5">
+        <a href="index.html" class="nav-link relative flex items-center gap-2 px-4 h-9 rounded-full text-blue-700 text-xs font-semibold font-inter z-0">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.67" class="w-3.5 h-3.5 shrink-0"><path stroke-linecap="round" stroke-linejoin="round" d="M3 9.5L10 3l7 6.5V17a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M8 18V13h4v5"/></svg>
+          <span class="relative">Home</span><span class="nav-indicator"></span>
+        </a>
+        <a href="projects.html" class="nav-link relative flex items-center gap-2 px-4 h-9 rounded-full text-blue-700 text-xs font-semibold font-inter z-0">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" class="w-3.5 h-3.5 shrink-0"><rect x="3" y="4" width="14" height="12" rx="2"/><path stroke-linecap="round" d="M7 8h6M7 11h4"/></svg>
+          <span class="relative">Projects</span><span class="nav-indicator"></span>
+        </a>
+        <a href="about.html" class="nav-link active-pill relative flex items-center gap-2 px-4 h-9 rounded-full text-blue-700 text-xs font-semibold font-inter z-0">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" class="w-3.5 h-3.5 shrink-0"><circle cx="10" cy="7" r="3"/><path stroke-linecap="round" d="M4.5 17c0-3.038 2.462-5.5 5.5-5.5s5.5 2.462 5.5 5.5"/></svg>
+          <span class="relative">About</span><span class="nav-indicator"></span>
+        </a>
+        <a href="index.html#contact" class="nav-link relative flex items-center gap-2 px-4 h-9 rounded-full text-blue-700 text-xs font-semibold font-inter z-0">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" class="w-3.5 h-3.5 shrink-0"><rect x="2" y="4" width="16" height="12" rx="2"/><path stroke-linecap="round" stroke-linejoin="round" d="M2 7l8 5 8-5"/></svg>
+          <span class="relative">Contact</span><span class="nav-indicator"></span>
+        </a>
+      </nav>
+      <div class="flex items-center gap-2.5 shrink-0">
+        <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">
+          <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.67" width="16" height="16"><circle cx="10" cy="10" r="3.5"/><path stroke-linecap="round" d="M10 2v2M10 16v2M2 10h2M16 10h2M4.2 4.2l1.4 1.4M14.4 14.4l1.4 1.4M4.2 15.8l1.4-1.4M14.4 5.6l1.4-1.4"/></svg>
+          <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="16" height="16"><path d="M17.5 11.5A7.5 7.5 0 0 1 8.5 2.5a7.5 7.5 0 1 0 9 9Z"/></svg>
+        </button>
+        <a href="index.html#contact" class="btn-primary inline-flex items-center justify-center h-9 px-5 rounded-full text-xs font-inter">Let's Talk</a>
+        <label for="menu-toggle" class="md:hidden flex items-center justify-center w-9 h-9 cursor-pointer rounded-full bg-white/60 border border-blue-100 hover:bg-blue-50 transition-all" aria-label="Toggle menu">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.67" class="w-5 h-5 stroke-blue-600"><path stroke-linecap="round" d="M3 5h14M3 10h14M3 15h14"/></svg>
+        </label>
+      </div>
+    </div>
+    <input type="checkbox" id="menu-toggle" class="sr-only" />
+    <nav aria-label="Mobile navigation" class="mobile-nav hidden flex-col gap-1 px-5 pb-4 md:hidden bg-white/80 backdrop-blur-xl border-t border-blue-100/50">
+      <a href="index.html"         class="flex items-center gap-3 py-2.5 px-3 rounded-xl text-sm text-blue-700 hover:bg-blue-50 transition-colors">Home</a>
+      <a href="projects.html"      class="flex items-center gap-3 py-2.5 px-3 rounded-xl text-sm text-blue-700 hover:bg-blue-50 transition-colors">Projects</a>
+      <a href="about.html"         class="flex items-center gap-3 py-2.5 px-3 rounded-xl text-sm text-blue-800 font-semibold hover:bg-blue-50 transition-colors">About</a>
+      <a href="index.html#contact" class="flex items-center gap-3 py-2.5 px-3 rounded-xl text-sm text-blue-700 hover:bg-blue-50 transition-colors">Contact</a>
+      <button id="theme-toggle-mobile" class="flex items-center gap-3 py-2.5 px-3 rounded-xl text-sm text-blue-700 hover:bg-blue-50 transition-colors w-full text-left">
+        <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.67" width="16" height="16"><circle cx="10" cy="10" r="3.5"/><path stroke-linecap="round" d="M10 2v2M10 16v2M2 10h2M16 10h2M4.2 4.2l1.4 1.4M14.4 14.4l1.4 1.4M4.2 15.8l1.4-1.4M14.4 5.6l1.4-1.4"/></svg>
+        <svg class="icon-moon hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="16" height="16"><path d="M17.5 11.5A7.5 7.5 0 0 1 8.5 2.5a7.5 7.5 0 1 0 9 9Z"/></svg>
+        <span class="toggle-label">Dark Mode</span>
+      </button>
+    </nav>
+  </header>
+ 
+ 
+  <!-- PAGE HEADER -->
+  <section class="relative z-10 pt-16 pb-10 md:pt-24 md:pb-14">
+    <div class="w-full max-w-[1400px] mx-auto px-6">
+      <div class="anim-heading">
+        <p class="font-inter text-xs font-semibold tracking-[0.18em] text-blue-500 uppercase mb-3">Who I Am</p>
+        <h1 class="font-sora font-bold text-4xl sm:text-5xl text-blue-900 leading-tight">About Me</h1>
+        <p class="font-inter text-base text-slate-500 mt-4 max-w-lg leading-7">
+          Bridging technology and creativity to build things that matter.
+        </p>
+      </div>
+    </div>
+  </section>
+ 
+  <!-- PROFILE CARD SECTION -->
+  <section class="relative z-10 pb-16 md:pb-20">
+    <div class="w-full max-w-[1400px] mx-auto px-6">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
+        <!-- Profile Photo -->
+        <div class="flex justify-center md:col-span-1">
+          <div class="anim-section relative w-48 h-48 sm:w-56 sm:h-56">
+            <!-- Glossy glass effect -->
+            <div class="absolute inset-0 rounded-full" style="background: linear-gradient(135deg, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.10) 100%); backdrop-filter: blur(15px); border: 1.5px solid rgba(255,255,255,0.50); box-shadow: 0 12px 40px rgba(59,130,246,0.25), inset 0 1px 2px rgba(255,255,255,0.60);"></div>
+            <!-- Profile photo -->
+            <img src="assets/img/profile.jpg" alt="Cici Ramadhani" class="absolute inset-0 w-full h-full rounded-full object-cover" />
+            <!-- Shine effect overlay -->
+            <div class="absolute inset-0 rounded-full" style="background: linear-gradient(135deg, rgba(255,255,255,0.45) 0%, transparent 50%); pointer-events: none;"></div>
+          </div>
+        </div>
+ 
+        <!-- Profile Info -->
+        <div class="md:col-span-2 anim-section flex flex-col gap-6">
+          <div>
+            <h2 class="font-sora font-bold text-3xl sm:text-4xl text-blue-900 mb-2">Cici Ramadhani</h2>
+            <p class="font-inter text-lg text-blue-600 font-semibold">IT Student · Content Creator</p>
+            <p class="font-inter text-sm text-slate-500 mt-1">Universitas Brawijaya</p>
+          </div>
+          
+          <div class="flex flex-wrap gap-2">
+            <span class="specialty-badge">UI/UX</span>
+            <span class="specialty-badge">Content</span>
+            <span class="specialty-badge">Frontend</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+ 
+ 
+  <div class="relative z-10 w-full max-w-[1400px] mx-auto px-6 pb-24 flex flex-col gap-8">
+ 
+    <!-- BIO + STATS -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+ 
+      <!-- Bio -->
+      <div class="anim-section lg:col-span-2 section-card p-7 flex flex-col gap-5">
+        <div class="flex items-center gap-3 mb-1">
+          <div class="w-10 h-10 rounded-full bg-blue-50 border border-blue-100 flex items-center justify-center shrink-0">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="none" stroke="#60a5fa" stroke-width="1.5" class="w-5 h-5">
+              <circle cx="10" cy="7" r="3"/><path stroke-linecap="round" d="M4.5 17c0-3.038 2.462-5.5 5.5-5.5s5.5 2.462 5.5 5.5"/>
+            </svg>
+          </div>
+          <div>
+            <h2 class="font-sora font-semibold text-blue-900 text-base">Cici Ramadhani</h2>
+            <p class="font-inter text-xs text-blue-500 mt-0.5">IT Student · Universitas Brawijaya</p>
+          </div>
+        </div>
+        <p class="font-inter text-sm text-slate-600 leading-7">
+          I'm an Information Technology student at Universitas Brawijaya. My work spans UI/UX design, frontend development, content creation, and community building. I enjoy merging analytical thinking with creative work to build digital experiences that actually connect with people.
+        </p>
+        <p class="font-inter text-sm text-slate-600 leading-7">
+          Whether I'm designing a platform for women, running a fashion store on Roblox, or producing educational reels, I try to be intentional, detail-oriented, and audience-first in everything I do.
+        </p>
+        <div class="flex flex-wrap gap-2 mt-1">
+          <span class="specialty-badge" style="padding:4px 12px;font-size:0.65rem;">UI/UX Design</span>
+          <span class="specialty-badge" style="padding:4px 12px;font-size:0.65rem;">Frontend Dev</span>
+          <span class="specialty-badge" style="padding:4px 12px;font-size:0.65rem;">Content Creation</span>
+          <span class="specialty-badge" style="padding:4px 12px;font-size:0.65rem;">Community Mgmt</span>
+          <span class="specialty-badge" style="padding:4px 12px;font-size:0.65rem;">Video Production</span>
+          <span class="specialty-badge" style="padding:4px 12px;font-size:0.65rem;">Public Speaking</span>
+        </div>
+      </div>
+ 
+      <!-- Stats -->
+      <div class="anim-section delay-1 flex flex-col gap-4">
+        <div class="about-stat">
+          <p class="font-sora font-bold text-3xl text-blue-600">4+</p>
+          <p class="font-inter text-xs text-slate-500 mt-1 font-medium uppercase tracking-wide">Projects Completed</p>
+        </div>
+        <div class="about-stat">
+          <p class="font-sora font-bold text-3xl text-blue-600">80K+</p>
+          <p class="font-inter text-xs text-slate-500 mt-1 font-medium uppercase tracking-wide">Sales Generated</p>
+        </div>
+        <div class="about-stat">
+          <p class="font-sora font-bold text-3xl text-blue-600">400+</p>
+          <p class="font-inter text-xs text-slate-500 mt-1 font-medium uppercase tracking-wide">Community Members</p>
+        </div>
+      </div>
+    </div>
+ 
+ 
+    <!-- SKILLS + EXPERIENCE -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+ 
+      <!-- Skills -->
+      <div class="anim-section section-card p-7">
+        <h3 class="font-sora font-semibold text-blue-900 text-base mb-6">Skills</h3>
+        <div class="flex flex-col gap-5" id="skillBars">
+          <div>
+            <div class="flex justify-between mb-1.5">
+              <span class="font-inter text-xs font-semibold text-slate-700">Video Editing</span>
+              <span class="font-inter text-xs text-blue-500 font-medium">92%</span>
+            </div>
+            <div class="skill-bar-bg"><div class="skill-bar-fill" data-w="0.92"></div></div>
+          </div>
+          <div>
+            <div class="flex justify-between mb-1.5">
+              <span class="font-inter text-xs font-semibold text-slate-700">Content Writing &amp; Scripting</span>
+              <span class="font-inter text-xs text-blue-500 font-medium">88%</span>
+            </div>
+            <div class="skill-bar-bg"><div class="skill-bar-fill" data-w="0.88"></div></div>
+          </div>
+          <div>
+            <div class="flex justify-between mb-1.5">
+              <span class="font-inter text-xs font-semibold text-slate-700">UI/UX Design</span>
+              <span class="font-inter text-xs text-blue-500 font-medium">85%</span>
+            </div>
+            <div class="skill-bar-bg"><div class="skill-bar-fill" data-w="0.85"></div></div>
+          </div>
+          <div>
+            <div class="flex justify-between mb-1.5">
+              <span class="font-inter text-xs font-semibold text-slate-700">Frontend Development</span>
+              <span class="font-inter text-xs text-blue-500 font-medium">78%</span>
+            </div>
+            <div class="skill-bar-bg"><div class="skill-bar-fill" data-w="0.78"></div></div>
+          </div>
+          <div>
+            <div class="flex justify-between mb-1.5">
+              <span class="font-inter text-xs font-semibold text-slate-700">Community Management</span>
+              <span class="font-inter text-xs text-blue-500 font-medium">88%</span>
+            </div>
+            <div class="skill-bar-bg"><div class="skill-bar-fill" data-w="0.88"></div></div>
+          </div>
+          <div>
+            <div class="flex justify-between mb-1.5">
+              <span class="font-inter text-xs font-semibold text-slate-700">Public Speaking</span>
+              <span class="font-inter text-xs text-blue-500 font-medium">90%</span>
+            </div>
+            <div class="skill-bar-bg"><div class="skill-bar-fill" data-w="0.90"></div></div>
+          </div>
+        </div>
+        <!-- Software -->
+        <div class="mt-7 pt-5 border-t border-blue-100/60">
+          <p class="font-inter text-xs font-bold text-blue-400 uppercase tracking-widest mb-4">Tools &amp; Software</p>
+          <div class="flex flex-col gap-3">
+
+            <!-- Creative -->
+            <div class="tool-group-card" style="border:1px solid rgba(186,218,255,0.40);border-radius:0.875rem;padding:0.85rem 1rem;">
+              <p class="font-inter text-xs font-semibold text-blue-400 uppercase tracking-widest mb-3">Creative</p>
+              <div class="grid grid-cols-2 gap-2">
+                <div class="flex items-center gap-2.5">
+                  <img src="assets/icon/capcut.png" alt="CapCut" class="w-7 h-7 rounded-lg object-contain tool-icon" style="background:rgba(219,234,254,0.40);padding:3px;" />
+                  <div><p class="font-inter text-xs font-semibold text-slate-700 leading-none">CapCut</p><p class="font-inter text-[0.62rem] text-slate-400 mt-0.5">Video Editing</p></div>
+                </div>
+                <div class="flex items-center gap-2.5">
+                  <img src="assets/icon/kinemaster.png" alt="KineMaster" class="w-7 h-7 rounded-lg object-contain tool-icon" style="background:rgba(219,234,254,0.40);padding:3px;" />
+                  <div><p class="font-inter text-xs font-semibold text-slate-700 leading-none">KineMaster</p><p class="font-inter text-[0.62rem] text-slate-400 mt-0.5">Video Editing</p></div>
+                </div>
+                <div class="flex items-center gap-2.5">
+                  <img src="assets/icon/alightmotion.png" alt="Alight Motion" class="w-7 h-7 rounded-lg object-contain tool-icon" style="background:rgba(219,234,254,0.40);padding:3px;" />
+                  <div><p class="font-inter text-xs font-semibold text-slate-700 leading-none">Alight Motion</p><p class="font-inter text-[0.62rem] text-slate-400 mt-0.5">Motion Graphics</p></div>
+                </div>
+                <div class="flex items-center gap-2.5">
+                  <img src="assets/icon/canva.png" alt="Canva" class="w-7 h-7 rounded-lg object-contain tool-icon" style="background:rgba(219,234,254,0.40);padding:3px;" />
+                  <div><p class="font-inter text-xs font-semibold text-slate-700 leading-none">Canva</p><p class="font-inter text-[0.62rem] text-slate-400 mt-0.5">Graphic Design</p></div>
+                </div>
+                <div class="flex items-center gap-2.5">
+                  <img src="assets/icon/figma.png" alt="Figma" class="w-7 h-7 rounded-lg object-contain tool-icon" style="background:rgba(219,234,254,0.40);padding:3px;" />
+                  <div><p class="font-inter text-xs font-semibold text-slate-700 leading-none">Figma</p><p class="font-inter text-[0.62rem] text-slate-400 mt-0.5">UI/UX Design</p></div>
+                </div>
+                <div class="flex items-center gap-2.5">
+                  <img src="assets/icon/pinterest.png" alt="Pinterest" class="w-7 h-7 rounded-lg object-contain tool-icon" style="background:rgba(219,234,254,0.40);padding:3px;" />
+                  <div><p class="font-inter text-xs font-semibold text-slate-700 leading-none">Pinterest</p><p class="font-inter text-[0.62rem] text-slate-400 mt-0.5">References</p></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Development -->
+            <div class="tool-group-card" style="border:1px solid rgba(186,218,255,0.40);border-radius:0.875rem;padding:0.85rem 1rem;">
+              <p class="font-inter text-xs font-semibold text-blue-400 uppercase tracking-widest mb-3">Development</p>
+              <div class="grid grid-cols-2 gap-2">
+                <div class="flex items-center gap-2.5">
+                  <img src="assets/icon/vscode.png" alt="VS Code" class="w-7 h-7 rounded-lg object-contain tool-icon" style="background:rgba(219,234,254,0.40);padding:3px;" />
+                  <div><p class="font-inter text-xs font-semibold text-slate-700 leading-none">VS Code</p><p class="font-inter text-[0.62rem] text-slate-400 mt-0.5">Code Editor</p></div>
+                </div>
+                <div class="flex items-center gap-2.5">
+                  <img src="assets/icon/github.png" alt="GitHub" class="w-7 h-7 rounded-lg object-contain tool-icon" style="background:rgba(219,234,254,0.40);padding:3px;" />
+                  <div><p class="font-inter text-xs font-semibold text-slate-700 leading-none">GitHub</p><p class="font-inter text-[0.62rem] text-slate-400 mt-0.5">Version Control</p></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Productivity -->
+            <div class="tool-group-card" style="border:1px solid rgba(186,218,255,0.40);border-radius:0.875rem;padding:0.85rem 1rem;">
+              <p class="font-inter text-xs font-semibold text-blue-400 uppercase tracking-widest mb-3">Productivity</p>
+              <div class="grid grid-cols-2 gap-2">
+                <div class="flex items-center gap-2.5">
+                  <img src="assets/icon/notion.png" alt="Notion" class="w-7 h-7 rounded-lg object-contain tool-icon" style="background:rgba(219,234,254,0.40);padding:3px;" />
+                  <div><p class="font-inter text-xs font-semibold text-slate-700 leading-none">Notion</p><p class="font-inter text-[0.62rem] text-slate-400 mt-0.5">Tracking</p></div>
+                </div>
+                <div class="flex items-center gap-2.5">
+                  <img src="assets/icon/google.png" alt="Google Workspace" class="w-7 h-7 rounded-lg object-contain tool-icon" style="background:rgba(219,234,254,0.40);padding:3px;" />
+                  <div><p class="font-inter text-xs font-semibold text-slate-700 leading-none">Google Workspace</p><p class="font-inter text-[0.62rem] text-slate-400 mt-0.5">Collaboration</p></div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+ 
+      <!-- Experience Timeline -->
+      <div class="anim-section delay-1 section-card p-7">
+        <h3 class="font-sora font-semibold text-blue-900 text-base mb-6">Experience</h3>
+        <div class="flex flex-col gap-6">
+          <div class="timeline-item">
+            <p class="font-inter text-xs text-blue-500 font-semibold uppercase tracking-wide mb-0.5">Feb 2025 – Present</p>
+            <p class="font-inter font-semibold text-sm text-slate-800">Founder &amp; Lead Designer</p>
+            <p class="font-inter text-xs text-blue-600 mb-1">The Enchanted Outfit</p>
+            <p class="font-inter text-xs text-slate-500 leading-5">Built a Roblox fashion brand to 80K+ sales and 400+ community members in three months.</p>
+          </div>
+          <div class="timeline-item">
+            <p class="font-inter text-xs text-blue-500 font-semibold uppercase tracking-wide mb-0.5">Aug – Dec 2025</p>
+            <p class="font-inter font-semibold text-sm text-slate-800">Content Creator Intern</p>
+            <p class="font-inter text-xs text-blue-600 mb-1">Kautamaan Srikandi</p>
+            <p class="font-inter text-xs text-slate-500 leading-5">Produced educational Instagram Reels for a women's empowerment platform. Full production cycle from research to on-camera presenting. 100% on-time delivery.</p>
+          </div>
+          <div class="timeline-item">
+            <p class="font-inter text-xs text-blue-500 font-semibold uppercase tracking-wide mb-0.5">2024</p>
+            <p class="font-inter font-semibold text-sm text-slate-800">Project Leader</p>
+            <p class="font-inter text-xs text-blue-600 mb-1">Beev Campaign</p>
+            <p class="font-inter text-xs text-slate-500 leading-5">Led digital awareness campaign for mental health and social causes from concept to launch.</p>
+          </div>
+          <div class="timeline-item">
+            <p class="font-inter text-xs text-blue-500 font-semibold uppercase tracking-wide mb-0.5">2025</p>
+            <p class="font-inter font-semibold text-sm text-slate-800">UI/UX &amp; Frontend Developer</p>
+            <p class="font-inter text-xs text-blue-600 mb-1">SheRise</p>
+            <p class="font-inter text-xs text-slate-500 leading-5">Designed and built a women's empowerment platform with career tracking and community features.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+ 
+ 
+    <!-- EDUCATION + CERTIFICATION -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+ 
+      <!-- Education -->
+      <div class="anim-section section-card p-7">
+        <h3 class="font-sora font-semibold text-blue-900 text-base mb-6">Education</h3>
+        <div class="flex items-start gap-4">
+          <div class="w-11 h-11 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center shrink-0">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="none" stroke="#60a5fa" stroke-width="1.5" class="w-5 h-5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M10 2L2 6l8 4 8-4-8-4ZM2 6v6M6 8v6c0 1.1 1.8 2 4 2s4-.9 4-2V8"/>
+            </svg>
+          </div>
+          <div>
+            <p class="font-sora font-semibold text-sm text-slate-800">Brawijaya University</p>
+            <p class="font-inter text-xs text-blue-600 mt-0.5">Faculty of Computer Science · Information Technology</p>
+            <p class="font-inter text-xs text-blue-400 font-semibold uppercase tracking-wide mt-1">Aug 2025 – Present </p>
+            <p class="font-inter text-xs text-slate-500 leading-5 mt-2">Currently in my second semester, focusing on software development and digital systems. GPA: 3.95.</p>
+          </div>
+        </div>
+        <!-- Cert below education -->
+        <div class="mt-6 pt-5 border-t border-blue-100/60">
+          <h3 class="font-sora font-semibold text-blue-900 text-base mb-4">Certification</h3>
+          <div class="cert-card">
+            <div class="w-10 h-10 rounded-xl bg-white border border-blue-100 flex items-center justify-center shrink-0 shadow-sm">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="none" stroke="#3b82f6" stroke-width="1.5" class="w-5 h-5">
+                <circle cx="10" cy="10" r="7"/>
+                <path stroke-linecap="round" stroke-linejoin="round" d="M7 10l2 2 4-4"/>
+              </svg>
+            </div>
+            <div>
+              <p class="font-inter text-xs font-semibold text-slate-800 leading-5">Certified Digital Marketing Specialist</p>
+              <p class="font-inter text-xs text-blue-500 mt-0.5">Content Creation · Badan Nasional Sertifikasi Profesi (BNSP)</p>
+            </div>
+          </div>
+        </div>
+      </div>
+ 
+      <!-- Achievements -->
+      <div class="anim-section delay-1 section-card p-7">
+        <h3 class="font-sora font-semibold text-blue-900 text-base mb-6">Achievements</h3>
+        <div class="flex flex-col gap-3">
+ 
+          <div class="ach-card">
+            <div class="ach-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="none" stroke="#3b82f6" stroke-width="1.5" class="w-5 h-5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M10 2l1.8 5.5H17l-4.6 3.3 1.8 5.5L10 13l-4.2 3.3 1.8-5.5L3 7.5h5.2L10 2Z"/>
+              </svg>
+            </div>
+            <div>
+              <p class="font-inter text-xs font-semibold text-slate-800 leading-5">3rd Place — National Science Olympiad</p>
+              <p class="font-inter text-xs text-blue-500 mt-0.5">Informatics · Kabupaten Berau · 2024</p>
+            </div>
+          </div>
+ 
+          <div class="ach-card">
+            <div class="ach-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="none" stroke="#3b82f6" stroke-width="1.5" class="w-5 h-5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 10h8M10 6v8"/>
+                <circle cx="10" cy="10" r="7"/>
+              </svg>
+            </div>
+            <div>
+              <p class="font-inter text-xs font-semibold text-slate-800 leading-5">2nd Best Speaker — National School Debate</p>
+              <p class="font-inter text-xs text-blue-500 mt-0.5">Kabupaten Level · 2024</p>
+            </div>
+          </div>
+ 
+          <div class="ach-card">
+            <div class="ach-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="none" stroke="#3b82f6" stroke-width="1.5" class="w-5 h-5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4 15s1-1 4-1 5 2 8 2V3s-3-1-6-1-6 2-6 2v12Z"/>
+              </svg>
+            </div>
+            <div>
+              <p class="font-inter text-xs font-semibold text-slate-800 leading-5">2nd Place Best Speaker — Indonesian Language Debate</p>
+              <p class="font-inter text-xs text-blue-500 mt-0.5">Kabupaten Berau · 2023</p>
+            </div>
+          </div>
+ 
+          <div class="ach-card">
+            <div class="ach-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="none" stroke="#3b82f6" stroke-width="1.5" class="w-5 h-5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M10 2l1.8 5.5H17l-4.6 3.3 1.8 5.5L10 13l-4.2 3.3 1.8-5.5L3 7.5h5.2L10 2Z"/>
+              </svg>
+            </div>
+            <div>
+              <p class="font-inter text-xs font-semibold text-slate-800 leading-5">1st Place — Speech Competition</p>
+              <p class="font-inter text-xs text-blue-500 mt-0.5">Kabupaten Level · 2023</p>
+            </div>
+          </div>
+ 
+        </div>
+      </div>
+    </div>
+ 
+  </div>
+ 
+ 
+  <!-- FOOTER -->
+  <footer class="relative z-10 py-8 text-center border-t border-blue-100/60">
+    <p class="font-inter text-xs text-blue-400/70 tracking-wide">
+      © 2025 Cici Ramadhani · Information Technology, Universitas Brawijaya
+    </p>
+  </footer>
+ 
+ 
+  <script>
+  (function () {
+ 
+    /* SCROLL REVEAL */
+    var revealObs = new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) {
+        if (e.isIntersecting) { e.target.classList.add('visible'); revealObs.unobserve(e.target); }
+      });
+    }, { threshold: 0.08 });
+    document.querySelectorAll('.anim-section').forEach(function(el) { revealObs.observe(el); });
+ 
+    /* SKILL BARS */
+    var barObs = new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) {
+        if (e.isIntersecting) {
+          e.target.querySelectorAll('.skill-bar-fill').forEach(function(bar) {
+            var w = parseFloat(bar.getAttribute('data-w') || 1);
+            bar.style.transform = 'scaleX(' + w + ')';
+          });
+          barObs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.25 });
+    var skillSection = document.getElementById('skillBars');
+    if (skillSection) barObs.observe(skillSection);
+
+    /* ── Theme toggle ── */
+    var htmlEl = document.documentElement;
+    var toggleBtn = document.getElementById('theme-toggle');
+    var toggleBtnMobile = document.getElementById('theme-toggle-mobile');
+
+    function setTheme(isDark) {
+      htmlEl.classList.toggle('dark', isDark);
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+      var label = toggleBtnMobile ? toggleBtnMobile.querySelector('.toggle-label') : null;
+      if (label) label.textContent = isDark ? 'Light Mode' : 'Dark Mode';
+      if (toggleBtnMobile) {
+        toggleBtnMobile.querySelector('.icon-sun').classList.toggle('hidden', isDark);
+        toggleBtnMobile.querySelector('.icon-moon').classList.toggle('hidden', !isDark);
+      }
+    }
+    setTheme(htmlEl.classList.contains('dark'));
+
+    function toggleTheme() { setTheme(!htmlEl.classList.contains('dark')); }
+    if (toggleBtn) toggleBtn.addEventListener('click', toggleTheme);
+    if (toggleBtnMobile) toggleBtnMobile.addEventListener('click', toggleTheme);
+ 
+  })();
+  </script>
+ 
+</body>
+</html>
