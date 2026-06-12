@@ -820,7 +820,8 @@
  
         <!-- Contact form -->
         <div class="anim-section delay-1 lg:col-span-3">
-          <form class="section-card p-7 flex flex-col gap-5" id="contactForm" novalidate>
+          <form class="section-card p-7 flex flex-col gap-5" id="contactForm" name="contact" netlify data-netlify="true" novalidate>
+            <input type="hidden" name="form-name" value="contact" />
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <div>
                 <label class="form-label" for="cf-name">Name</label>
@@ -1067,8 +1068,12 @@
     /* ── 5. Contact form ── */
     var form = document.getElementById('contactForm');
     var toast = document.getElementById('form-toast');
+    var submitBtn = form.querySelector('[type="submit"]');
+
     form.addEventListener('submit', function(e) {
       e.preventDefault();
+
+      // Validate required fields
       var ok = true;
       form.querySelectorAll('[required]').forEach(function(inp) {
         if (!inp.value.trim()) {
@@ -1081,9 +1086,43 @@
         }
       });
       if (!ok) return;
-      toast.classList.add('show');
-      form.reset();
-      setTimeout(function() { toast.classList.remove('show'); }, 3800);
+
+      // Loading state
+      submitBtn.disabled = true;
+      submitBtn.style.opacity = '0.7';
+      submitBtn.textContent = 'Sending…';
+
+      var formData = new FormData(form);
+
+      fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams(formData).toString()
+      })
+      .then(function(res) {
+        if (res.ok) {
+          toast.textContent = '✓ Message sent! I\'ll get back to you soon.';
+          toast.style.background = '';
+          toast.classList.add('show');
+          form.reset();
+        } else {
+          throw new Error('Network response was not ok');
+        }
+      })
+      .catch(function() {
+        toast.textContent = '✗ Something went wrong. Please try again.';
+        toast.style.background = 'rgba(239,68,68,0.92)';
+        toast.classList.add('show');
+      })
+      .finally(function() {
+        submitBtn.disabled = false;
+        submitBtn.style.opacity = '';
+        submitBtn.innerHTML = 'Send Message <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10l14-7-7 14V10H3Z"/></svg>';
+        setTimeout(function() {
+          toast.classList.remove('show');
+          toast.style.background = '';
+        }, 3800);
+      });
     });
  
     /* ── 6. Project overlay ── */
